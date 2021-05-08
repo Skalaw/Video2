@@ -6,19 +6,19 @@ import com.rocksolidapps.core.api.rest.TmdbRest
 import io.reactivex.rxjava3.core.Observable
 
 class VideoRepositoryImpl(private val tmdbRest: TmdbRest) : VideoRepository {
-    override suspend fun fetchDiscoverMovie(page: Int, language: String): DiscoverMoviePages {
-        return tmdbRest.fetchDiscoverMovie(page, language)
+    override suspend fun fetchDiscoverMovie(page: Int): DiscoverMoviePages {
+        return tmdbRest.fetchDiscoverMovie(page)
     }
 
-    override suspend fun getMovieInfo(movieId: Int, language: String?): MovieInfo {
-        return tmdbRest.getMovieInfo(movieId, language)
+    override suspend fun fetchMovieInfo(movieId: Int): MovieInfo {
+        return tmdbRest.getMovieInfo(movieId)
     }
 
-    override fun fetchDiscoverMovieRx(page: Int, language: String): Observable<DiscoverMoviePages> {
-        return tmdbRest.fetchDiscoverMovieRx(page, language)
+    override fun fetchDiscoverMovieRx(page: Int): Observable<DiscoverMoviePages> {
+        return tmdbRest.fetchDiscoverMovieRx(page)
     }
 
-    override fun getMovieInfoRx(movieId: Int, language: String?): Observable<MovieInfo> {
-        return tmdbRest.getMovieInfoRx(movieId, language)
+    override fun fetchMovieInfoRx(movieId: Int): Observable<MovieInfo> {
+        return tmdbRest.getMovieInfoRx(movieId)
     }
 }

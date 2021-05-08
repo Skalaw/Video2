@@ -5,8 +5,8 @@ import com.rocksolidapps.core.api.model.MovieInfo
 import io.reactivex.rxjava3.core.Observable
 
 interface VideoRepository {
-    suspend fun fetchDiscoverMovie(page: Int, language: String): DiscoverMoviePages
-    suspend fun getMovieInfo(movieId: Int, language: String?): MovieInfo
-    fun fetchDiscoverMovieRx(page: Int, language: String): Observable<DiscoverMoviePages>
-    fun getMovieInfoRx(movieId: Int, language: String?): Observable<MovieInfo>
+    suspend fun fetchDiscoverMovie(page: Int): DiscoverMoviePages
+    suspend fun fetchMovieInfo(movieId: Int): MovieInfo
+    fun fetchDiscoverMovieRx(page: Int): Observable<DiscoverMoviePages>
+    fun fetchMovieInfoRx(movieId: Int): Observable<MovieInfo>
 }

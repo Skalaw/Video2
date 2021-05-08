@@ -10,25 +10,21 @@ import retrofit2.http.Query
 interface TmdbRest {
     @GET("discover/movie")
     suspend fun fetchDiscoverMovie(
-        @Query("page") page: Int,
-        @Query("language") language: String
+        @Query("page") page: Int
     ): DiscoverMoviePages
 
     @GET("movie/{movieId}")
     suspend fun getMovieInfo(
-        @Path("movieId") movieId: Int,
-        @Query("language") language: String?
+        @Path("movieId") movieId: Int
     ): MovieInfo
 
     @GET("discover/movie")
     fun fetchDiscoverMovieRx(
-        @Query("page") page: Int,
-        @Query("language") language: String
+        @Query("page") page: Int
     ): Observable<DiscoverMoviePages>
 
     @GET("movie/{movieId}")
     fun getMovieInfoRx(
-        @Path("movieId") movieId: Int,
-        @Query("language") language: String?
+        @Path("movieId") movieId: Int
     ): Observable<MovieInfo>
 }
