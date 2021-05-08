@@ -18,13 +18,14 @@ class DiscoverMovieViewModel(
 ) : BaseViewModel() {
     private val _movieList = MutableStateFlow(UiModel(data = arrayListOf<MovieSimple>()))
     val movieList: StateFlow<UiModel<List<MovieSimple>>> = _movieList
+    private val _isLastPage = MutableStateFlow(false)
+    val isLastPage: StateFlow<Boolean> = _isLastPage
 
     var actualPage = 1
-    var isLastPage = false
 
     fun fetchDiscoverMovieRx() {
         viewModelScope.launch {
-            if (isLastPage) return@launch
+            if (_isLastPage.value) return@launch
             _movieList.value.copy(isLoading = true)
             disposables += fetchDiscoverMovieRxUseCase(actualPage)
                 .subscribeOn(schedulers.io)
@@ -36,7 +37,7 @@ class DiscoverMovieViewModel(
                         addAll(oldList)
                         addAll(newList)
                     })
-                    isLastPage = actualPage == discoverMoviePage.totalPages
+                    _isLastPage.value = actualPage == discoverMoviePage.totalPages
                     actualPage++
                 }, { throwable ->
                     _movieList.value.copy(isLoading = false, error = Consumable(Unit))
@@ -48,7 +49,7 @@ class DiscoverMovieViewModel(
         viewModelScope.launch {
             _movieList.value = _movieList.value.copy(data = arrayListOf())
             actualPage = 1
-            isLastPage = false
+            _isLastPage.value = false
             fetchDiscoverMovieRx()
         }
     }
