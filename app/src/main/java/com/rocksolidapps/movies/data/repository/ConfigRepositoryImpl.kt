@@ -3,8 +3,9 @@ package com.rocksolidapps.movies.data.repository
 import com.rocksolidapps.core.domain.repository.ConfigRepository
 import com.rocksolidapps.movies.BuildConfig
 import java.util.*
+import javax.inject.Inject
 
-class ConfigRepositoryImpl : ConfigRepository {
+class ConfigRepositoryImpl @Inject constructor() : ConfigRepository {
     override val isDebug: Boolean
         get() = BuildConfig.DEBUG
     override val apiKey: String

@@ -4,8 +4,9 @@ import com.rocksolidapps.core.api.model.DiscoverMoviePages
 import com.rocksolidapps.core.api.model.MovieInfo
 import com.rocksolidapps.core.api.rest.TmdbRest
 import io.reactivex.rxjava3.core.Observable
+import javax.inject.Inject
 
-class VideoRepositoryImpl(private val tmdbRest: TmdbRest) : VideoRepository {
+class VideoRepositoryImpl @Inject constructor(private val tmdbRest: TmdbRest) : VideoRepository {
     override suspend fun fetchDiscoverMovie(page: Int): DiscoverMoviePages {
         return tmdbRest.fetchDiscoverMovie(page)
     }

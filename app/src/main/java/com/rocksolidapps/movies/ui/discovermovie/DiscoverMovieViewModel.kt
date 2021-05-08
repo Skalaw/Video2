@@ -11,8 +11,9 @@ import com.rocksolidapps.movies.ui.UiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DiscoverMovieViewModel(
+class DiscoverMovieViewModel @Inject constructor(
     private val schedulers: SchedulersInjector,
     private val fetchDiscoverMovieRxUseCase: FetchDiscoverMovieRxUseCase
 ) : BaseViewModel() {
@@ -23,16 +24,28 @@ class DiscoverMovieViewModel(
 
     var actualPage = 1
 
-    fun fetchDiscoverMovieRx() {
+    init {
+        fetchDiscoverMovie()
+    }
+
+    fun fetchDiscoverMovie() {
+        fetchDiscoverMovieRx()
+    }
+
+    fun refreshDiscoverMovie() {
+        refreshDiscoverMovieRx()
+    }
+
+    private fun fetchDiscoverMovieRx() {
         viewModelScope.launch {
             if (_isLastPage.value) return@launch
-            _movieList.value.copy(isLoading = true)
+            _movieList.value = _movieList.value.copy(isLoading = true)
             disposables += fetchDiscoverMovieRxUseCase(actualPage)
                 .subscribeOn(schedulers.io)
                 .observeOn(schedulers.ui)
                 .subscribe({ discoverMoviePage ->
                     val oldList = _movieList.value.data
-                    val newList = discoverMoviePage.result.map { discoverMovie -> MovieSimple(id = discoverMovie.id, title = discoverMovie.title) }
+                    val newList = discoverMoviePage.results.map { discoverMovie -> MovieSimple(id = discoverMovie.id, title = discoverMovie.title) }
                     _movieList.value = _movieList.value.copy(isLoading = false, data = arrayListOf<MovieSimple>().apply {
                         addAll(oldList)
                         addAll(newList)
@@ -40,17 +53,17 @@ class DiscoverMovieViewModel(
                     _isLastPage.value = actualPage == discoverMoviePage.totalPages
                     actualPage++
                 }, { throwable ->
-                    _movieList.value.copy(isLoading = false, error = Consumable(Unit))
+                    _movieList.value = _movieList.value.copy(isLoading = false, error = Consumable(Unit))
                 })
         }
     }
 
-    fun refreshDiscoverMovieRx() {
+    private fun refreshDiscoverMovieRx() {
         viewModelScope.launch {
-            _movieList.value = _movieList.value.copy(data = arrayListOf())
+            _movieList.value = _movieList.value.copy(data = arrayListOf(), isLoading = true)
             actualPage = 1
             _isLastPage.value = false
-            fetchDiscoverMovieRx()
+            fetchDiscoverMovie()
         }
     }
 }

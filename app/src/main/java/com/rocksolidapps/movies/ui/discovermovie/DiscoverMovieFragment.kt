@@ -4,15 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rocksolidapps.movies.databinding.FragmentDiscoverMovieBinding
+import com.rocksolidapps.movies.ext.viewCoroutineScope
 import com.rocksolidapps.movies.ui.BaseFragment
 import com.rocksolidapps.movies.view.recyclerview.PaginationScrollListener
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class DiscoverMovieFragment : BaseFragment() {
     lateinit var binding: FragmentDiscoverMovieBinding
     lateinit var discoverMovieAdapter: DiscoverMovieAdapter
+
+    private val viewModel: DiscoverMovieViewModel by viewModels { viewModelFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDiscoverMovieBinding.inflate(inflater, container, false)
@@ -29,19 +35,24 @@ class DiscoverMovieFragment : BaseFragment() {
                 if (it !is LinearLayoutManager) return@let
                 addOnScrollListener(object : PaginationScrollListener(it) {
                     override fun loadMoreItems() {
-                        binding.swipeRefreshLayout.isRefreshing = true
-                        // TODO: fetch from ViewModel
+                        viewModel.fetchDiscoverMovie()
                     }
 
                     override val isLastPage: Boolean
-                        get() = false // TODO: get from ViewModel
+                        get() = viewModel.isLastPage.value
                     override val isLoading: Boolean
-                        get() = false // TODO: get from ViewModel
+                        get() = viewModel.movieList.value.isLoading
                 })
             }
         }
-        binding.swipeRefreshLayout.setOnRefreshListener { /* TODO: ViewModel */ }
-        // TODO: remember binding.swipeRefreshLayout.isRefreshing = false , when new items is fetched
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.refreshDiscoverMovie() }
+
+        viewCoroutineScope.launch {
+            viewModel.movieList.collect {
+                binding.swipeRefreshLayout.isRefreshing = it.isLoading
+                discoverMovieAdapter.submitList(it.data)
+            }
+        }
     }
 
     companion object {

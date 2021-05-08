@@ -50,6 +50,9 @@ dependencies {
     //rxJava3 Android
     api 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
+    //dagger2
+    kapt 'com.google.dagger:dagger-compiler:2.35.1'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
