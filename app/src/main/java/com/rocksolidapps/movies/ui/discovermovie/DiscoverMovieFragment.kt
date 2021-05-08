@@ -25,4 +25,9 @@ class DiscoverMovieFragment : BaseFragment() {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
     }
+
+    companion object {
+        const val TAG = "DiscoverMovieFragment"
+        fun newInstance() = DiscoverMovieFragment()
+    }
 }
