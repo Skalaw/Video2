@@ -1,3 +1,6 @@
+Properties tmdbApi = new Properties()
+tmdbApi.load(new FileInputStream("./secure/video_api.properties"))
+
 buildscript {
     ext.kotlin_version = "1.5.0"
     repositories {
@@ -14,6 +17,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+    project.ext {
+        TMDB_API_KEY = "\"${tmdbApi.apiKey}\""
     }
 }
 

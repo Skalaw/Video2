@@ -1,3 +1,6 @@
 package com.rocksolidapps.core.api.model
 
-class MovieInfo()
+data class MovieInfo(
+    val id: Int,
+    val title: String
+)
