@@ -48,7 +48,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     //rxJava3 Android
-    api 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
     //dagger2
     kapt 'com.google.dagger:dagger-compiler:2.35.1'

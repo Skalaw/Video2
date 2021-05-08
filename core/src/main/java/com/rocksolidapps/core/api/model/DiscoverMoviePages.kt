@@ -15,5 +15,6 @@ class DiscoverMoviePages(
 data class DiscoverMovie(
     val id: Int,
     val title: String,
+    val overview: String,
     @Json(name = "poster_path") val posterPath: String
 )

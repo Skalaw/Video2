@@ -45,7 +45,7 @@ class DiscoverMovieViewModel @Inject constructor(
                 .observeOn(schedulers.ui)
                 .subscribe({ discoverMoviePage ->
                     val oldList = _movieList.value.data
-                    val newList = discoverMoviePage.results.map { discoverMovie -> MovieSimple(id = discoverMovie.id, title = discoverMovie.title) }
+                    val newList = discoverMoviePage.results.map { discoverMovie -> MovieSimple(id = discoverMovie.id, title = discoverMovie.title, overview = discoverMovie.overview) }
                     _movieList.value = _movieList.value.copy(isLoading = false, data = arrayListOf<MovieSimple>().apply {
                         addAll(oldList)
                         addAll(newList)

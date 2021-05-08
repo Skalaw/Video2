@@ -27,7 +27,9 @@ class DiscoverMovieFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        discoverMovieAdapter = DiscoverMovieAdapter()
+        discoverMovieAdapter = DiscoverMovieAdapter {
+            // TODO click item
+        }
         binding.rvDiscoverMovie.apply {
             adapter = discoverMovieAdapter
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
