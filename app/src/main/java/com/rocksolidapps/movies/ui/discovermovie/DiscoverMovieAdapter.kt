@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rocksolidapps.core.domain.model.MovieSimple
 import com.rocksolidapps.movies.databinding.ItemDiscoverMovieBinding
 
-class DiscoverMovieAdapter(val onClickListener: (item: MovieSimple) -> Unit) : ListAdapter<MovieSimple, DiscoverViewHolder>(MovieDiffCallback()) {
+class DiscoverMovieAdapter(private val onClickListener: (item: MovieSimple) -> Unit) : ListAdapter<MovieSimple, DiscoverViewHolder>(MovieDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiscoverViewHolder {
         val binding = ItemDiscoverMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DiscoverViewHolder(binding, onClickListener)

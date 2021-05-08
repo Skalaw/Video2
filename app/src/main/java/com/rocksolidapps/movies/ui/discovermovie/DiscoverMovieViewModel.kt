@@ -36,11 +36,11 @@ class DiscoverMovieViewModel @Inject constructor(
         refreshDiscoverMovieRx()
     }
 
-    private fun fetchDiscoverMovieRx() {
+    private fun fetchDiscoverMovieRx(page: Int = actualPage) {
         viewModelScope.launch {
             if (_isLastPage.value) return@launch
             _movieList.value = _movieList.value.copy(isLoading = true)
-            disposables += fetchDiscoverMovieRxUseCase(actualPage)
+            disposables += fetchDiscoverMovieRxUseCase(page)
                 .subscribeOn(schedulers.io)
                 .observeOn(schedulers.ui)
                 .subscribe({ discoverMoviePage ->
@@ -50,7 +50,7 @@ class DiscoverMovieViewModel @Inject constructor(
                         addAll(oldList)
                         addAll(newList)
                     })
-                    _isLastPage.value = actualPage == discoverMoviePage.totalPages
+                    _isLastPage.value = page == discoverMoviePage.totalPages
                     actualPage++
                 }, { throwable ->
                     _movieList.value = _movieList.value.copy(isLoading = false, error = Consumable(Unit))

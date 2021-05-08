@@ -3,6 +3,7 @@ package com.rocksolidapps.movies
 import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.rocksolidapps.movies.di.AppComponent
 import com.rocksolidapps.movies.di.DaggerAppComponent
 
@@ -11,6 +12,7 @@ class MovieApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Fresco.initialize(this)
         appComponent = DaggerAppComponent.builder()
             .application(this)
             .build()

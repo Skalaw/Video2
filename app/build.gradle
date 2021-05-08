@@ -53,6 +53,9 @@ dependencies {
     //dagger2
     kapt 'com.google.dagger:dagger-compiler:2.35.1'
 
+    //fresco
+    implementation 'com.facebook.fresco:fresco:2.4.0'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

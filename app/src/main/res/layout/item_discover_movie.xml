@@ -21,19 +21,19 @@
         android:onClick="@{clickListener}"
         android:padding="16dp">
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/ivPoster"
             android:layout_width="96dp"
             android:layout_height="128dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" /> <!-- TODO -->
+            app:layout_constraintTop_toTopOf="parent" /> <!-- TODO: app:actualImageUri-->
 
         <TextView
             android:id="@+id/tvTitle"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="8dp"
             android:text="@{item.title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivPoster"
@@ -45,7 +45,7 @@
             style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:maxLines="6"
             android:text="@{item.overview}"
