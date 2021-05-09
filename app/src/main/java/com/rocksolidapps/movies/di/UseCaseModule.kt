@@ -1,9 +1,6 @@
 package com.rocksolidapps.movies.di
 
-import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieRxUseCase
-import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieRxUseCaseImpl
-import com.rocksolidapps.core.domain.usecase.FetchMovieRxUseCase
-import com.rocksolidapps.core.domain.usecase.FetchMovieRxUseCaseImpl
+import com.rocksolidapps.core.domain.usecase.*
 import dagger.Binds
 import dagger.Module
 
@@ -14,4 +11,10 @@ interface UseCaseModule {
 
     @Binds
     fun provideFetchMovieRxUseCase(fetchMovieRxUseCase: FetchMovieRxUseCaseImpl): FetchMovieRxUseCase
+
+    @Binds
+    fun provideFetchDiscoverMovieUseCase(fetchDiscoverMovieUseCase: FetchDiscoverMovieUseCaseImpl): FetchDiscoverMovieUseCase
+
+    @Binds
+    fun provideFetchMovieUseCase(fetchMovieUseCase: FetchMovieUseCaseImpl): FetchMovieUseCase
 }

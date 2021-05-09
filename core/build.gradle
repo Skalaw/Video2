@@ -12,6 +12,9 @@ java {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    //coroutines
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
+
     //rxJava3
     api "io.reactivex.rxjava3:rxjava:3.0.12"
 

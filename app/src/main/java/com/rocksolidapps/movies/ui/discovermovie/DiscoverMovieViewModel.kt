@@ -3,6 +3,7 @@ package com.rocksolidapps.movies.ui.discovermovie
 import androidx.lifecycle.viewModelScope
 import com.rocksolidapps.core.domain.model.MovieSimple
 import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieRxUseCase
+import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieUseCase
 import com.rocksolidapps.core.ext.plusAssign
 import com.rocksolidapps.movies.data.repository.SchedulersInjector
 import com.rocksolidapps.movies.tools.Consumable
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class DiscoverMovieViewModel @Inject constructor(
     private val schedulers: SchedulersInjector,
-    private val fetchDiscoverMovieRxUseCase: FetchDiscoverMovieRxUseCase
+    private val fetchDiscoverMovieRxUseCase: FetchDiscoverMovieRxUseCase,
+    private val fetchDiscoverMovieUseCase: FetchDiscoverMovieUseCase
 ) : BaseViewModel() {
     private val _movieList = MutableStateFlow(UiModel(data = arrayListOf<MovieSimple>()))
     val movieList: StateFlow<UiModel<List<MovieSimple>>> = _movieList
@@ -33,7 +35,12 @@ class DiscoverMovieViewModel @Inject constructor(
     }
 
     fun refreshDiscoverMovie() {
-        refreshDiscoverMovieRx()
+        viewModelScope.launch {
+            _movieList.value = _movieList.value.copy(data = arrayListOf(), isLoading = true)
+            actualPage = 1
+            _isLastPage.value = false
+            fetchDiscoverMovie()
+        }
     }
 
     private fun fetchDiscoverMovieRx(page: Int = actualPage) {
@@ -45,7 +52,13 @@ class DiscoverMovieViewModel @Inject constructor(
                 .observeOn(schedulers.ui)
                 .subscribe({ discoverMoviePage ->
                     val oldList = _movieList.value.data
-                    val newList = discoverMoviePage.results.map { discoverMovie -> MovieSimple(id = discoverMovie.id, title = discoverMovie.title, overview = discoverMovie.overview) }
+                    val newList = discoverMoviePage.results.map { discoverMovie ->
+                        MovieSimple(
+                            id = discoverMovie.id,
+                            title = discoverMovie.title,
+                            overview = discoverMovie.overview
+                        )
+                    }
                     _movieList.value = _movieList.value.copy(isLoading = false, data = arrayListOf<MovieSimple>().apply {
                         addAll(oldList)
                         addAll(newList)
@@ -55,15 +68,6 @@ class DiscoverMovieViewModel @Inject constructor(
                 }, { throwable ->
                     _movieList.value = _movieList.value.copy(isLoading = false, error = Consumable(Unit))
                 })
-        }
-    }
-
-    private fun refreshDiscoverMovieRx() {
-        viewModelScope.launch {
-            _movieList.value = _movieList.value.copy(data = arrayListOf(), isLoading = true)
-            actualPage = 1
-            _isLastPage.value = false
-            fetchDiscoverMovie()
         }
     }
 }
