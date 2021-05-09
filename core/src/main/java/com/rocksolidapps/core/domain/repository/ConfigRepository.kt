@@ -4,4 +4,5 @@ interface ConfigRepository {
     val isDebug: Boolean
     val apiKey: String
     val language: String
+    val useRxJava: Boolean
 }

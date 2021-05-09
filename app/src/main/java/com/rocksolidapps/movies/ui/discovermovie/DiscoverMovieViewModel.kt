@@ -1,7 +1,10 @@
 package com.rocksolidapps.movies.ui.discovermovie
 
 import androidx.lifecycle.viewModelScope
+import com.rocksolidapps.core.api.model.DiscoverMoviePages
+import com.rocksolidapps.core.api.network.ResultWrapper
 import com.rocksolidapps.core.domain.model.MovieSimple
+import com.rocksolidapps.core.domain.repository.ConfigRepository
 import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieRxUseCase
 import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieUseCase
 import com.rocksolidapps.core.ext.plusAssign
@@ -16,6 +19,7 @@ import javax.inject.Inject
 
 class DiscoverMovieViewModel @Inject constructor(
     private val schedulers: SchedulersInjector,
+    private val configRepository: ConfigRepository,
     private val fetchDiscoverMovieRxUseCase: FetchDiscoverMovieRxUseCase,
     private val fetchDiscoverMovieUseCase: FetchDiscoverMovieUseCase
 ) : BaseViewModel() {
@@ -31,7 +35,15 @@ class DiscoverMovieViewModel @Inject constructor(
     }
 
     fun fetchDiscoverMovie() {
-        fetchDiscoverMovieRx()
+        viewModelScope.launch {
+            if (_isLastPage.value) return@launch
+            _movieList.value = _movieList.value.copy(isLoading = true)
+            if (configRepository.useRxJava) {
+                fetchDiscoverMovieRx()
+            } else {
+                fetchDiscoverMovieCoroutine()
+            }
+        }
     }
 
     fun refreshDiscoverMovie() {
@@ -45,29 +57,41 @@ class DiscoverMovieViewModel @Inject constructor(
 
     private fun fetchDiscoverMovieRx(page: Int = actualPage) {
         viewModelScope.launch {
-            if (_isLastPage.value) return@launch
-            _movieList.value = _movieList.value.copy(isLoading = true)
             disposables += fetchDiscoverMovieRxUseCase(page)
                 .subscribeOn(schedulers.io)
                 .observeOn(schedulers.ui)
                 .subscribe({ discoverMoviePage ->
-                    val oldList = _movieList.value.data
-                    val newList = discoverMoviePage.results.map { discoverMovie ->
-                        MovieSimple(
-                            id = discoverMovie.id,
-                            title = discoverMovie.title,
-                            overview = discoverMovie.overview
-                        )
-                    }
-                    _movieList.value = _movieList.value.copy(isLoading = false, data = arrayListOf<MovieSimple>().apply {
-                        addAll(oldList)
-                        addAll(newList)
-                    })
-                    _isLastPage.value = page == discoverMoviePage.totalPages
-                    actualPage++
+                    propagateData(discoverMoviePage)
                 }, { throwable ->
                     _movieList.value = _movieList.value.copy(isLoading = false, error = Consumable(Unit))
                 })
         }
+    }
+
+    private fun fetchDiscoverMovieCoroutine(page: Int = actualPage) {
+        viewModelScope.launch {
+            when (val result = fetchDiscoverMovieUseCase(page)) {
+                is ResultWrapper.Success -> propagateData(result.value)
+                is ResultWrapper.GenericError -> _movieList.value = _movieList.value.copy(isLoading = false, error = Consumable(Unit))
+                is ResultWrapper.NetworkError -> _movieList.value = _movieList.value.copy(isLoading = false, error = Consumable(Unit))
+            }
+        }
+    }
+
+    private fun propagateData(discoverMoviePage: DiscoverMoviePages) {
+        val oldList = _movieList.value.data
+        val newList = discoverMoviePage.results.map { discoverMovie ->
+            MovieSimple(
+                id = discoverMovie.id,
+                title = discoverMovie.title,
+                overview = discoverMovie.overview
+            )
+        }
+        _movieList.value = _movieList.value.copy(isLoading = false, data = arrayListOf<MovieSimple>().apply {
+            addAll(oldList)
+            addAll(newList)
+        })
+        _isLastPage.value = actualPage == discoverMoviePage.totalPages
+        actualPage++
     }
 }
