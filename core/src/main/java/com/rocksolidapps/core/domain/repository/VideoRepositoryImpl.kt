@@ -1,5 +1,6 @@
 package com.rocksolidapps.core.domain.repository
 
+import com.rocksolidapps.core.api.model.Configuration
 import com.rocksolidapps.core.api.model.DiscoverMoviePages
 import com.rocksolidapps.core.api.model.MovieInfo
 import com.rocksolidapps.core.api.network.ResultWrapper
@@ -14,6 +15,12 @@ class VideoRepositoryImpl @Inject constructor(
     private val tmdbRest: TmdbRest,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : VideoRepository {
+    override suspend fun fetchConfiguration(): ResultWrapper<Configuration> {
+        return safeApiCall(dispatcher) {
+            tmdbRest.fetchConfiguration()
+        }
+    }
+
     override suspend fun fetchDiscoverMovie(page: Int): ResultWrapper<DiscoverMoviePages> {
         return safeApiCall(dispatcher) {
             tmdbRest.fetchDiscoverMovie(page)
@@ -24,6 +31,10 @@ class VideoRepositoryImpl @Inject constructor(
         return safeApiCall(dispatcher) {
             tmdbRest.getMovieInfo(movieId)
         }
+    }
+
+    override fun fetchConfigurationRx(): Observable<Configuration> {
+        return tmdbRest.fetchConfigurationRx()
     }
 
     override fun fetchDiscoverMovieRx(page: Int): Observable<DiscoverMoviePages> {

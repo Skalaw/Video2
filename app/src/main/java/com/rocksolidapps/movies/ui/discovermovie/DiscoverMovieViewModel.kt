@@ -1,8 +1,8 @@
 package com.rocksolidapps.movies.ui.discovermovie
 
 import androidx.lifecycle.viewModelScope
-import com.rocksolidapps.core.api.model.DiscoverMoviePages
 import com.rocksolidapps.core.api.network.ResultWrapper
+import com.rocksolidapps.core.domain.model.DiscoverMoviePage
 import com.rocksolidapps.core.domain.model.MovieSimple
 import com.rocksolidapps.core.domain.repository.ConfigRepository
 import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieRxUseCase
@@ -78,15 +78,9 @@ class DiscoverMovieViewModel @Inject constructor(
         }
     }
 
-    private fun propagateData(discoverMoviePage: DiscoverMoviePages) {
+    private fun propagateData(discoverMoviePage: DiscoverMoviePage) {
         val oldList = _movieList.value.data
-        val newList = discoverMoviePage.results.map { discoverMovie ->
-            MovieSimple(
-                id = discoverMovie.id,
-                title = discoverMovie.title,
-                overview = discoverMovie.overview
-            )
-        }
+        val newList = discoverMoviePage.items
         _movieList.value = _movieList.value.copy(isLoading = false, data = arrayListOf<MovieSimple>().apply {
             addAll(oldList)
             addAll(newList)

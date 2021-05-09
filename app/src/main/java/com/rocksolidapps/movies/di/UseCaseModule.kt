@@ -7,6 +7,12 @@ import dagger.Module
 @Module
 interface UseCaseModule {
     @Binds
+    fun provideFetchConfigurationTmbdRxUseCase(fetchConfigurationTmbdRxUseCase: FetchConfigurationTmbdRxUseCaseImpl): FetchConfigurationTmbdRxUseCase
+
+    @Binds
+    fun provideFetchConfigurationTmbdUseCase(fetchConfigurationTmbdUseCase: FetchConfigurationTmbdUseCaseImpl): FetchConfigurationTmbdUseCase
+
+    @Binds
     fun provideFetchDiscoverMovieRxUseCase(fetchDiscoverMovieRxUseCase: FetchDiscoverMovieRxUseCaseImpl): FetchDiscoverMovieRxUseCase
 
     @Binds

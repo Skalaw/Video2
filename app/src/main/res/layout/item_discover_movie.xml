@@ -25,8 +25,9 @@
             android:id="@+id/ivPoster"
             android:layout_width="96dp"
             android:layout_height="128dp"
+            app:imageUri="@{item.urlPoster}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" /> <!-- TODO: app:actualImageUri-->
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvTitle"
