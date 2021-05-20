@@ -11,7 +11,7 @@
 
         <variable
             name="item"
-            type="com.rocksolidapps.core.domain.model.MovieSimple" />
+            type="com.rocksolidapps.core.domain.model.DiscoverMovieUi" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

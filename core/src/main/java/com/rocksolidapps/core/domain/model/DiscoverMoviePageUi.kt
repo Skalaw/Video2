@@ -1,7 +1,7 @@
 package com.rocksolidapps.core.domain.model
 
-data class DiscoverMoviePage(
+data class DiscoverMoviePageUi(
     val page: Int,
-    val items: List<MovieSimple>,
+    val items: List<DiscoverMovieUi>,
     val totalPages: Int
 )

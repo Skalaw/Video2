@@ -2,6 +2,7 @@ package com.rocksolidapps.movies.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.rocksolidapps.movies.ui.detailmovie.DetailMovieViewModel
 import com.rocksolidapps.movies.ui.discovermovie.DiscoverMovieViewModel
 import dagger.Binds
 import dagger.Module
@@ -16,6 +17,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(DiscoverMovieViewModel::class)
     fun discoverMovieViewModel(viewModel: DiscoverMovieViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailMovieViewModel::class)
+    fun detailMovieViewModel(viewModel: DetailMovieViewModel): ViewModel
 
     companion object {
         @Provides

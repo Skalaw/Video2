@@ -2,7 +2,7 @@ package com.rocksolidapps.core.domain.repository
 
 import com.rocksolidapps.core.api.model.Configuration
 import com.rocksolidapps.core.api.model.DiscoverMoviePages
-import com.rocksolidapps.core.api.model.MovieInfo
+import com.rocksolidapps.core.api.model.MovieDetails
 import com.rocksolidapps.core.api.network.ResultWrapper
 import com.rocksolidapps.core.api.network.safeApiCall
 import com.rocksolidapps.core.api.rest.TmdbRest
@@ -27,9 +27,9 @@ class VideoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchMovieInfo(movieId: Int): ResultWrapper<MovieInfo> {
+    override suspend fun fetchMovieDetails(movieId: Int): ResultWrapper<MovieDetails> {
         return safeApiCall(dispatcher) {
-            tmdbRest.getMovieInfo(movieId)
+            tmdbRest.getMovieDetails(movieId)
         }
     }
 
@@ -41,7 +41,7 @@ class VideoRepositoryImpl @Inject constructor(
         return tmdbRest.fetchDiscoverMovieRx(page)
     }
 
-    override fun fetchMovieInfoRx(movieId: Int): Observable<MovieInfo> {
-        return tmdbRest.getMovieInfoRx(movieId)
+    override fun fetchMovieDetailsRx(movieId: Int): Observable<MovieDetails> {
+        return tmdbRest.getMovieDetailsRx(movieId)
     }
 }

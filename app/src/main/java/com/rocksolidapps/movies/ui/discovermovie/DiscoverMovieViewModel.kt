@@ -2,8 +2,8 @@ package com.rocksolidapps.movies.ui.discovermovie
 
 import androidx.lifecycle.viewModelScope
 import com.rocksolidapps.core.api.network.ResultWrapper
-import com.rocksolidapps.core.domain.model.DiscoverMoviePage
-import com.rocksolidapps.core.domain.model.MovieSimple
+import com.rocksolidapps.core.domain.model.DiscoverMoviePageUi
+import com.rocksolidapps.core.domain.model.DiscoverMovieUi
 import com.rocksolidapps.core.domain.repository.ConfigRepository
 import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieRxUseCase
 import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieUseCase
@@ -23,8 +23,8 @@ class DiscoverMovieViewModel @Inject constructor(
     private val fetchDiscoverMovieRxUseCase: FetchDiscoverMovieRxUseCase,
     private val fetchDiscoverMovieUseCase: FetchDiscoverMovieUseCase
 ) : BaseViewModel() {
-    private val _movieList = MutableStateFlow(UiModel(data = arrayListOf<MovieSimple>()))
-    val movieList: StateFlow<UiModel<List<MovieSimple>>> = _movieList
+    private val _movieList = MutableStateFlow(UiModel(data = arrayListOf<DiscoverMovieUi>()))
+    val movieList: StateFlow<UiModel<List<DiscoverMovieUi>>> = _movieList
     private val _isLastPage = MutableStateFlow(false)
     val isLastPage: StateFlow<Boolean> = _isLastPage
 
@@ -78,14 +78,14 @@ class DiscoverMovieViewModel @Inject constructor(
         }
     }
 
-    private fun propagateData(discoverMoviePage: DiscoverMoviePage) {
+    private fun propagateData(discoverMoviePageUi: DiscoverMoviePageUi) {
         val oldList = _movieList.value.data
-        val newList = discoverMoviePage.items
-        _movieList.value = _movieList.value.copy(isLoading = false, data = arrayListOf<MovieSimple>().apply {
+        val newList = discoverMoviePageUi.items
+        _movieList.value = _movieList.value.copy(isLoading = false, data = arrayListOf<DiscoverMovieUi>().apply {
             addAll(oldList)
             addAll(newList)
         })
-        _isLastPage.value = actualPage == discoverMoviePage.totalPages
+        _isLastPage.value = actualPage == discoverMoviePageUi.totalPages
         actualPage++
     }
 }

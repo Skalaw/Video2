@@ -1,6 +1,6 @@
 package com.rocksolidapps.core.domain.model
 
-data class MovieSimple(
+data class DiscoverMovieUi(
     val id: Int,
     val title: String,
     val overview: String,

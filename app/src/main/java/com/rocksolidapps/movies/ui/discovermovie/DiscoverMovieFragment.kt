@@ -21,7 +21,9 @@ class DiscoverMovieFragment : BaseFragment() {
     private val viewModel: DiscoverMovieViewModel by viewModels { viewModelFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentDiscoverMovieBinding.inflate(inflater, container, false)
+        binding = FragmentDiscoverMovieBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = viewLifecycleOwner
+        }
         return binding.root
     }
 

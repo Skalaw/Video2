@@ -1,13 +1,14 @@
 package com.rocksolidapps.movies.ui.discovermovie
 
 import com.rocksolidapps.core.api.network.ResultWrapper
-import com.rocksolidapps.core.domain.model.DiscoverMoviePage
+import com.rocksolidapps.core.domain.model.DiscoverMoviePageUi
 import com.rocksolidapps.core.domain.repository.ConfigRepository
 import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieRxUseCase
 import com.rocksolidapps.core.domain.usecase.FetchDiscoverMovieUseCase
 import com.rocksolidapps.movies.TestSchedulerProvider
 import io.reactivex.rxjava3.core.Observable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -19,6 +20,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
+@ExperimentalCoroutinesApi
 class DiscoverMovieViewModelTest {
     private val configRepository = mock<ConfigRepository>()
     private val fetchDiscoverMovieRxUseCase = mock<FetchDiscoverMovieRxUseCase>()
@@ -186,7 +188,7 @@ class DiscoverMovieViewModelTest {
     private fun createObservableEmptyDiscoverMoviePager(page: Int) = Observable.just(createEmptyDiscoverMoviePager(page))
     private fun createResultWrapperEmptyDiscoverMoviePager(page: Int) = ResultWrapper.Success(createEmptyDiscoverMoviePager(page))
 
-    private fun createEmptyDiscoverMoviePager(page: Int) = DiscoverMoviePage(
+    private fun createEmptyDiscoverMoviePager(page: Int) = DiscoverMoviePageUi(
         page = page,
         items = arrayListOf(),
         totalPages = 4

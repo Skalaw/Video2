@@ -1,13 +1,13 @@
 package com.rocksolidapps.core.domain.usecase
 
 import com.rocksolidapps.core.api.network.ResultWrapper
-import com.rocksolidapps.core.domain.model.DiscoverMoviePage
-import com.rocksolidapps.core.domain.model.MovieSimple
+import com.rocksolidapps.core.domain.model.DiscoverMoviePageUi
+import com.rocksolidapps.core.domain.model.DiscoverMovieUi
 import com.rocksolidapps.core.domain.repository.VideoRepository
 import javax.inject.Inject
 
 class FetchDiscoverMovieUseCaseImpl @Inject constructor(private val videoRepository: VideoRepository) : FetchDiscoverMovieUseCase {
-    override suspend fun invoke(page: Int): ResultWrapper<DiscoverMoviePage> {
+    override suspend fun invoke(page: Int): ResultWrapper<DiscoverMoviePageUi> {
         val configurationWrapper = videoRepository.fetchConfiguration()
         if (configurationWrapper is ResultWrapper.GenericError) {
             return configurationWrapper
@@ -30,10 +30,10 @@ class FetchDiscoverMovieUseCaseImpl @Inject constructor(private val videoReposit
             val prefixPoster = configuration.images.baseUrl + configuration.images.posterSizes[0] // TODO: think about provide correct posterSizes
 
             return ResultWrapper.Success(
-                DiscoverMoviePage(
+                DiscoverMoviePageUi(
                     page = discoverMoviePages.page,
                     items = discoverMoviePages.results.map { discoverMovie ->
-                        MovieSimple(
+                        DiscoverMovieUi(
                             id = discoverMovie.id,
                             title = discoverMovie.title,
                             overview = discoverMovie.overview,

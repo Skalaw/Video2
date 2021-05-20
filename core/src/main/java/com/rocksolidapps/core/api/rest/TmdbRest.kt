@@ -2,7 +2,7 @@ package com.rocksolidapps.core.api.rest
 
 import com.rocksolidapps.core.api.model.Configuration
 import com.rocksolidapps.core.api.model.DiscoverMoviePages
-import com.rocksolidapps.core.api.model.MovieInfo
+import com.rocksolidapps.core.api.model.MovieDetails
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,9 +18,9 @@ interface TmdbRest {
     ): DiscoverMoviePages
 
     @GET("movie/{movieId}")
-    suspend fun getMovieInfo(
+    suspend fun getMovieDetails(
         @Path("movieId") movieId: Int
-    ): MovieInfo
+    ): MovieDetails
 
     @GET("configuration")
     fun fetchConfigurationRx(): Observable<Configuration>
@@ -31,7 +31,7 @@ interface TmdbRest {
     ): Observable<DiscoverMoviePages>
 
     @GET("movie/{movieId}")
-    fun getMovieInfoRx(
+    fun getMovieDetailsRx(
         @Path("movieId") movieId: Int
-    ): Observable<MovieInfo>
+    ): Observable<MovieDetails>
 }
