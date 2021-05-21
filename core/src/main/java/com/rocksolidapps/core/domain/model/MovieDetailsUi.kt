@@ -4,6 +4,6 @@ class MovieDetailsUi(
     val id: Int,
     val title: String,
     val overview: String?,
-    val posterPath: String?,
-    val backdropPath: String?,
+    val urlPoster: String?,
+    val urlBackdrop: String?,
 )

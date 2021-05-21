@@ -1,5 +1,6 @@
 package com.rocksolidapps.movies.ui.discovermovie
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +11,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rocksolidapps.movies.databinding.FragmentDiscoverMovieBinding
 import com.rocksolidapps.movies.ext.viewCoroutineScope
 import com.rocksolidapps.movies.ui.BaseFragment
+import com.rocksolidapps.movies.ui.main.MainActivityUi
 import com.rocksolidapps.movies.view.recyclerview.PaginationScrollListener
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class DiscoverMovieFragment : BaseFragment() {
     lateinit var binding: FragmentDiscoverMovieBinding
     lateinit var discoverMovieAdapter: DiscoverMovieAdapter
+    private var mainActivityUi: MainActivityUi? = null
 
     private val viewModel: DiscoverMovieViewModel by viewModels { viewModelFactory }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivityUi = context as? MainActivityUi
+    }
+
+    override fun onDetach() {
+        mainActivityUi = null
+        super.onDetach()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDiscoverMovieBinding.inflate(inflater, container, false).also {
@@ -30,7 +42,7 @@ class DiscoverMovieFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         discoverMovieAdapter = DiscoverMovieAdapter {
-            // TODO click item
+            mainActivityUi?.openDetailsMovie(it.id)
         }
         binding.rvDiscoverMovie.apply {
             adapter = discoverMovieAdapter
@@ -51,7 +63,7 @@ class DiscoverMovieFragment : BaseFragment() {
         }
         binding.swipeRefreshLayout.setOnRefreshListener { viewModel.refreshDiscoverMovie() }
 
-        viewCoroutineScope.launch {
+        viewCoroutineScope.launchWhenStarted {
             viewModel.movieList.collect {
                 binding.swipeRefreshLayout.isRefreshing = it.isLoading
                 discoverMovieAdapter.submitList(it.data)

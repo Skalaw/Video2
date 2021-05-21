@@ -17,8 +17,8 @@ class FetchMovieRxUseCaseImpl @Inject constructor(private val videoRepository: V
                 id = movieDetails.id,
                 title = movieDetails.title,
                 overview = movieDetails.overview,
-                posterPath = prefixPoster.plus(movieDetails.posterPath),
-                backdropPath = prefixBackdrop.plus(movieDetails.backdropPath)
+                urlPoster = prefixPoster.plus(movieDetails.posterPath),
+                urlBackdrop = prefixBackdrop.plus(movieDetails.backdropPath)
             )
         })
 }

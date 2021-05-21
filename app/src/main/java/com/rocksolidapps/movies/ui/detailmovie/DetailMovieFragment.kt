@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.rocksolidapps.movies.R
 import com.rocksolidapps.movies.databinding.FragmentDetailMovieBinding
+import com.rocksolidapps.movies.ext.viewCoroutineScope
 import com.rocksolidapps.movies.ui.BaseFragment
+import com.rocksolidapps.movies.ui.DataState
+import kotlinx.coroutines.flow.collect
 
 class DetailMovieFragment : BaseFragment() {
     lateinit var binding: FragmentDetailMovieBinding
@@ -19,6 +23,28 @@ class DetailMovieFragment : BaseFragment() {
         }
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewCoroutineScope.launchWhenStarted {
+            viewModel.movieDetailStateFlow.collect { dataState ->
+                when (dataState) {
+                    is DataState.Data -> binding.movie = dataState.data
+                    is DataState.LoadingState -> {
+                        // TODO:
+                    }
+                    is DataState.ErrorState -> {
+                        // TODO:
+                    }
+                }
+            }
+        }
+        if (savedInstanceState == null) {
+            viewModel.initViewModel(argumentMovieId())
+        }
+    }
+
+    fun argumentMovieId() = arguments?.getInt(ARG_MOVIE_ID) ?: 0
 
     companion object {
         const val TAG = "DetailMovieFragment"
